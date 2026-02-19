@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee?</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+background:linear-gradient(-45deg,#1e3a8a,#0f172a,#1e40af,#0ea5e9);
+background-size:400% 400%;
+animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(25px);
+padding:40px;
+border-radius:25px;
+text-align:center;
+width:90%;
+max-width:420px;
+color:white;
+box-shadow:0 30px 80px rgba(0,0,0,0.6);
+}
+
+.emoji{
+font-size:50px;
+margin-bottom:15px;
+animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-12px)}
+}
+
+h1{margin-bottom:25px;font-size:22px;}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:20px;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:50px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s ease;
+}
+
+#yesBtn{
+background:linear-gradient(45deg,#22c55e,#06b6d4);
+color:white;
+box-shadow:0 10px 25px rgba(34,197,94,0.5);
+}
+
+#yesBtn:hover{transform:scale(1.1);}
+
+#noBtn{
+background:rgba(255,255,255,0.2);
+color:white;
+border:1px solid rgba(255,255,255,0.3);
+position:relative;
+}
+
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0);
+background:white;
+color:#111;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 20px 50px rgba(0,0,0,0.5);
+transition:0.4s ease;
+z-index:10;
+}
+
+.popup.active{
+transform:translate(-50%,-50%) scale(1);
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<div class="emoji">☕</div>
+<h1>Hey! Want to grab a coffee sometime?</h1>
+
+<div class="buttons">
+<button id="yesBtn">Sure 😄</button>
+<button id="noBtn">NOO!!</button>
+</div>
+</div>
+
+<div class="popup" id="popup">
+<h2 id="popupText"></h2>
+</div>
+
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const popup=document.getElementById("popup");
+const popupText=document.getElementById("popupText");
+
+function sendResponse(answer){
+fetch("https://formspree.io/f/mzdavqbd",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+response:answer,
+time:new Date().toString()
+})
+});
+}
+
+function showPopup(text){
+popupText.innerText=text;
+popup.classList.add("active");
+setTimeout(()=>popup.classList.remove("active"),2500);
+}
+
+yesBtn.addEventListener("click",()=>{
+sendResponse("Said YES to coffee ☕");
+showPopup("Nice 😄 Coffee it is!");
+confetti();
+});
+
+noBtn.addEventListener("mouseover",()=>{
+const x=Math.random()*200-100;
+const y=Math.random()*200-100;
+noBtn.style.transform=`translate(${x}px,${y}px)`;
+});
+
+function confetti(){
+for(let i=0;i<40;i++){
+const c=document.createElement("div");
+c.style.position="fixed";
+c.style.width="8px";
+c.style.height="8px";
+c.style.background=`hsl(${Math.random()*360},70%,60%)`;
+c.style.left=Math.random()*100+"vw";
+c.style.top="-10px";
+c.style.borderRadius="50%";
+c.style.transition="transform 2s linear, opacity 2s";
+document.body.appendChild(c);
+setTimeout(()=>{
+c.style.transform=`translateY(100vh) rotate(${Math.random()*720}deg)`;
+c.style.opacity=0;
+},10);
+setTimeout(()=>c.remove(),2000);
+}
+}
+</script>
+
+</body>
+</html>
