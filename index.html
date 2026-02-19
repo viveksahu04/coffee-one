@@ -161,25 +161,30 @@ fetch("https://formspree.io/f/mzdavqbd", {
 function showPopup(text){
 popupText.innerText = text;
 popup.classList.add("active");
-
-setTimeout(()=>{
-  popup.classList.remove("active");
-},2500);
+setTimeout(()=>popup.classList.remove("active"),2500);
 }
 
+// YES BUTTON
 yesBtn.addEventListener("click", () => {
   sendResponse("YES 💗");
   showPopup("That made me smile ☕🌸");
 });
 
+// MAYBE LATER BUTTON (RUN AWAY 😈)
+noBtn.addEventListener("mouseover", () => {
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 200 - 100;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+// If somehow clicked (mobile case)
 noBtn.addEventListener("click", () => {
   sendResponse("MAYBE LATER 🌷");
   showPopup("That's okay… maybe another time 🌸");
 });
 </script>
-
-
 </body>
 </html>
+
 
 
